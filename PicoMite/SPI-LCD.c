@@ -27,7 +27,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 #include "MMBasic_Includes.h"
 #include "Hardware_Includes.h"
 const struct Displays display_details[]={
-		{"", SDCARD_SPI_SPEED, 0, 0, 0, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
+		{"", SDCARD_SPI_SPEED, 0, 0, 0, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},               //0
 		{"", SDCARD_SPI_SPEED, 0, 0, 0, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"SSD1306I2C", 400, 128, 64, 1, 1, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"SSD1306I2C32", 400, 128, 32, 1, 1, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
@@ -37,23 +37,27 @@ const struct Displays display_details[]={
 		{"ST7735S", LCD_SPI_SPEED, 160, 80, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"SSD1331", LCD_SPI_SPEED, 96, 64, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"ST7789", LCD_SPI_SPEED, 240, 240, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
-		{"ILI9481", LCD_SPI_SPEED, 480, 320, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
+		{"ILI9481", LCD_SPI_SPEED, 480, 320, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},     //10
 		{"ILI9488", LCD_SPI_SPEED, 480, 320, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"ST7789_135", LCD_SPI_SPEED, 240, 135, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"ST7789_320", 20000000, 320, 240, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"ILI9488W", 40000000, 480, 320, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
-		{"N5110", NOKIA_SPI_SPEED, 84, 48, 1, 1, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
+        {"GC9A01",LCD_SPI_SPEED, 240, 240, 16, 0,SPI_POLARITY_LOW,SPI_PHASE_1EDGE},          //15 
+		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},                                                      //16
+		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},                                                      //17
+		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},                                                      //18
+		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},                                                      //19
+		{"N5110", NOKIA_SPI_SPEED, 84, 48, 1, 1, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},         //20
 		{"SSD1306SPI", LCD_SPI_SPEED, 128, 64, 1, 1, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"ST7920", ST7920_SPI_SPEED, 128, 64, 1, 1, SPI_POLARITY_HIGH, SPI_PHASE_2EDGE},
 		{"GDEH029A1", EINK_SPI_SPEED, 128, 296, 1, 1, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
 		{"", TOUCH_SPI_SPEED, 0, 0, 0, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
-		{"ILI9488Read", 12000000, 480, 320, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
-		{"ST7789Read", 6000000, 320, 240, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},
-		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},
-		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},
-		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},
-		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},
-		{"User", 0, 0, 0, 0, 0, 0 ,0},
+		{"ILI9488Read", 12000000, 480, 320, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},       //25
+		{"ST7789Read", 6000000, 320, 240, 16, 0, SPI_POLARITY_LOW, SPI_PHASE_1EDGE},         //26
+		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},                                                      //27
+		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},                                                      //28
+		{"Dummy", 0, 0, 0, 0, 0, 0 ,0},                                                      //29
+		{"User", 0, 0, 0, 0, 0, 0 ,0}                                                       //30  USER
 
 };
 int LCD_CS_PIN=0;
@@ -168,6 +172,8 @@ void ConfigDisplaySPI(unsigned char *p) {
         Option.DISPLAY_TYPE = ST7920;
     } else if(checkstring(argv[0], "GDEH029A1")) {
         Option.DISPLAY_TYPE = GDEH029A1;
+	} else if(checkstring(argv[0], "GC9A01")) {
+        Option.DISPLAY_TYPE = GC9A01;	
 	} else return;
     if(!(argc == 7 || argc == 9 || argc==11 || argc==13)) error("Argument count");
     if(checkstring(argv[2], "L") || checkstring(argv[2], "LANDSCAPE"))
@@ -179,7 +185,7 @@ void ConfigDisplaySPI(unsigned char *p) {
     else if(checkstring(argv[2], "RP") || checkstring(argv[2], "RPORTRAIT"))
         Option.DISPLAY_ORIENTATION = RPORTRAIT;
     else error("Orientation");
-    if(Option.DISPLAY_TYPE==ST7789 || Option.DISPLAY_TYPE == ST7789A|| Option.DISPLAY_TYPE == ST7789A)Option.DISPLAY_ORIENTATION=(Option.DISPLAY_ORIENTATION+2) % 4;
+    if(Option.DISPLAY_TYPE==ST7789 || Option.DISPLAY_TYPE == ST7789A|| Option.DISPLAY_TYPE == ST7789B)Option.DISPLAY_ORIENTATION=(Option.DISPLAY_ORIENTATION+2) % 4;
 	if(!(code=codecheck(argv[4])))argv[4]+=2;
 	CD = getinteger(argv[4]);
 	if(!code)CD=codemap(CD);
@@ -224,7 +230,86 @@ void ConfigDisplaySPI(unsigned char *p) {
 	Option.DISPLAY_BL = BACKLIGHT;
     if(!(Option.DISPLAY_TYPE>I2C_PANEL && Option.DISPLAY_TYPE < BufferedPanel)) Option.Refresh = 1;
 }
+#define DELAY 0x80  //Bit7 of the count indicates a delay is also added.
+static const uint8_t
+  GC9A01Init[] = {                   // Initialization commands for GC9A01 screens
+    46,                              // commands in list:
 
+	0xEF, 0,                         //Inter reg enable 2
+    0xEB, 1,14,                      //
+	0xFE, 0,                         //Inter reg enable 1
+	0xEF, 0,                         //Inter reg enable 2
+	0x84,1,0x40,
+	0x85,1,0xFF,
+	0x86,1,0xFF,
+	0x87,1,0xFF,
+	0x88,1,0x0A,
+	0x89,1,0x21,
+
+	0x8A,1,0x00,
+	0x8B,1,0x80,
+	0x8C,1,0x01,
+	0x8D,1,0x01,
+	0x8E,1,0xFF,
+	0x8F,1,0xFF,
+	0xB6,2,0x00,0x00,                 //Display Function Control 0x00,0x02 ???  was 00,00
+	0x3A,1,0x55,                      // Pixel Interface Format  was 66
+	0xBD,1,0x06,
+	0xBC,1,0x00,
+
+	0xFF,3,0x60,0x01,0x04,   //????????????? 2 or 3
+	0xC3,1,0x13,                       //power control 2
+	0xC4,1,0x13,                       //power control 3
+	0xC9,1,0x22,                       //power control 4
+	0xBE,1,0x11,
+	0xE1,2,0x10,0x0E,
+	0xDF,3,0x21,0x0C,0x02,
+	0xF0,6,0x45,0x09,0x08,0x08,0x26,0x2A,  //Gamma 1
+	0xF1,6,0x43,0x70,0x72,0x36,0x37,0x6F,  //Gamma 2
+	0xF2,6,0x45,0x09,0x08,0x08,0x26,0x2A,  //Gamma 3
+
+	0xF3,6,0x43,0x70,0x72,0x36,0x37,0x6F,  //gamma 4
+	0xED,2,0x1B,0x0B,
+	0xAE,1,0x77,
+	0xCD,1,0x63,
+	0x70,9,0x07,0x07,0x04,0x0E,0x0F,0x09,0x07,0x08,0x03,
+	0xE8,1,0x34,  //frame rate  0x34
+	0x62,12,0x18,0x0D,0x71,0xED,0x70,0x70,0x18,0x0F,0x71,0xEF,0x70,0x70,
+	0x63,12,0x18,0x11,0x71,0xF1,0x70,0x70,0x18,0x13,0x71,0xF3,0x70,0x70,
+	0x64,7,0x28,0x29,0xF1,0x01,0xF1,0x01,0x07,
+	0x66,10,0x3C,0x00,0xCD,0x67,0x45,0x45,0x10,0x00,0x00,0x00,
+
+	0x67,10,0x00,0x3C,0x00,0x00,0x00,0x01,0x54,0x10,0x32,0x98,
+	0x74,7,0x10,0x85,0x80,0x00,0x00,0x4E,0x00,
+	0x98,2,0x3E,0x07,
+	//0x35,0,               //Tearing Effect ON Not required
+	0x21,0,               //Display Inversion ON
+	0x11,DELAY,120,          //Sleep OUT + 120ms
+	0x29,DELAY,20            //Display ON 20ms delay
+    };                    // 255 = 500 ms delay
+
+
+	// Companion code to the above tables.  Reads, decodes and issues
+// the LCD initialisation commands using data from static constants above.
+void static SendCommandBlock(const uint8_t *addr) {
+   uint8_t numCommands, numArgs;
+   uint16_t ms;
+   numCommands = *(addr++);               // Number of commands to follow
+   while(numCommands--) {                 // For each command...
+	 spi_write_command(*(addr++));        //   Read, issue command
+     numArgs  = *(addr++);                //   Number of args to follow
+     ms       = numArgs & DELAY;          //   If hibit set, delay follows args
+     numArgs &= ~DELAY;                   //   Mask out delay bit
+     while(numArgs--) {                   //   For each argument...
+       spi_write_data(*(addr++));         //   Read, issue argument
+     }
+     if(ms) {
+       ms = *(addr++);                    // Read post-command delay time (ms)
+       if(ms == 255) ms = 500;            // If 255, delay for 500 ms
+         uSec(ms*1000);                   //convert to uS
+     }
+   }
+}
 
 
 // initialise the display controller
@@ -591,6 +676,20 @@ void InitDisplaySPI(int InitOnly) {
                 case RPORTRAIT:     spi_write_cd(ST7735_MADCTL, 1, ST7735_Portrait180); break;
             }
             break;
+
+		case GC9A01:
+          	  //DisplayHRes = 240;
+        	 // DisplayVRes = 240;
+        	  ResetController();
+        	  SendCommandBlock(GC9A01Init);  //send the block of commands
+              switch(Option.DISPLAY_ORIENTATION) {
+                case LANDSCAPE:     spi_write_cd(ILI9341_MEMCONTROL,1,ILI9341_Landscape); break;     //28
+                case PORTRAIT:      spi_write_cd(ILI9341_MEMCONTROL,1,ILI9341_Portrait); break;      //48
+                case RLANDSCAPE:    spi_write_cd(ILI9341_MEMCONTROL,1,ILI9341_Landscape180); break;  //E8
+                case RPORTRAIT:     spi_write_cd(ILI9341_MEMCONTROL,1,ILI9341_Portrait180); break;   //88
+              }
+              break;
+	
         case N5110:
             ResetController();
             spi_write_command(0x21);   // LCD Extended Commands.

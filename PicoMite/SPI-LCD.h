@@ -251,21 +251,24 @@ extern void set_cs(void);
 #define ILI9341         5
 #define ST7735          6
 #define ST7735S         7
-#define SSD1331			    8
+#define SSD1331		    8
 #define ST7789          9
 #define ILI9481         10
 #define ILI9488         11
 #define ST7789A         12
 #define ST7789B         13
 #define ILI9488W        14
-#define N5110			15
+#define GC9A01          15 
+#define N5110			20
 #define BufferedPanel	N5110
-#define SSD1306SPI      16
-#define ST7920			17
-#define GDEH029A1		18
-#define TOUCH           19
-#define ILI9488Read     20
-#define DISP_USER       25
+#define SSD1306SPI      21
+#define ST7920			22
+#define GDEH029A1		23
+#define TOUCH           24
+#define ILI9488Read     25
+#define ST7789Read      26
+
+#define DISP_USER       30
 #define TFT_NOP 0x00
 #define TFT_SWRST 0x01
 
